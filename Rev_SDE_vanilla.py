@@ -86,6 +86,10 @@ class REVERSE_SDE2:
             prior_score = - (xt - alpha_t * self.x0[:,self.indxob]) / sigma2_t
             damping_likelihood = self.score_likelihood(xt, t, indx_indxob_linear, indx_indxob_nonlinear)
             damping_likelihood = torch.clip(damping_likelihood, min=-1000., max=1000.)
+            """count_max = (damping_likelihood == 1000.).sum().item()
+            print("Number of elements clipped to 1000:", count_max)
+            count_min = (damping_likelihood == -1000.).sum().item()
+            print("Number of elements clipped to -1000:", count_min)"""
             posterior_score = prior_score + damping_likelihood
             # Update
             xt_temp = xt - dt * (drift_fun * xt - diffuse ** 2 * posterior_score) + np.sqrt(dt) * diffuse * torch.randn_like(xt)
