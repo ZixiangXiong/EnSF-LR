@@ -61,6 +61,7 @@ class REVERSE_SDE2:
         score_x = torch.zeros((self.ensemble_size, self.y_dim),dtype=self.prior_ensemble.dtype)
         score_x[:, indx_indxob_linear] = -(xt[:, indx_indxob_linear] - self.obs[indx_indxob_linear]) / (self.obs_sigma[indx_indxob_linear] ** 2)
         score_x[:, indx_indxob_nonlinear] = (-(torch.atan(xt[:, indx_indxob_nonlinear]) - self.obs[indx_indxob_nonlinear]) / self.obs_sigma[indx_indxob_nonlinear] ** 2) * (1. / (1. + xt[:, indx_indxob_nonlinear]**2))
+        #score_x[:, indx_indxob_nonlinear] = (-(xt[:, indx_indxob_nonlinear] ** 5 - self.obs[indx_indxob_nonlinear]) / self.obs_sigma[indx_indxob_nonlinear] ** 2) * (5.0 * xt[:, indx_indxob_nonlinear]**4)
         tau = self.g_tau(t)
         return tau * score_x
 
@@ -75,7 +76,7 @@ class REVERSE_SDE2:
         xt = torch.randn(self.ensemble_size, self.y_dim)
         xt = (xt - xt.mean(dim=0)) / xt.std(dim=0)
         x_ens_full = torch.zeros((self.ensemble_size, self.x_dim),dtype=self.prior_ensemble.dtype)
-        x_ens_full[:, indxunob] = self.prior_ensemble[:, indxunob]
+        x_ens_full[:, indxunob] = self.prior_ensemble[:, indxunob].clone()
         t = 1.0
         for i in range(self.p_time_step):
             # prior score evaluation
@@ -86,11 +87,8 @@ class REVERSE_SDE2:
             prior_score = - (xt - alpha_t * self.x0[:,self.indxob]) / sigma2_t
             damping_likelihood = self.score_likelihood(xt, t, indx_indxob_linear, indx_indxob_nonlinear)
             damping_likelihood = torch.clip(damping_likelihood, min=-1000., max=1000.)
-            """count_max = (damping_likelihood == 1000.).sum().item()
-            print("Number of elements clipped to 1000:", count_max)
-            count_min = (damping_likelihood == -1000.).sum().item()
-            print("Number of elements clipped to -1000:", count_min)"""
             posterior_score = prior_score + damping_likelihood
+            #posterior_score = torch.clip(posterior_score, min=-1000., max=1000.)
             # Update
             xt_temp = xt - dt * (drift_fun * xt - diffuse ** 2 * posterior_score) + np.sqrt(dt) * diffuse * torch.randn_like(xt)
             #xt_temp = xt - dt * (drift_fun * xt - diffuse ** 2 * prior_score - damping_likelihood) + np.sqrt(dt) * diffuse * torch.randn_like(xt)
@@ -98,6 +96,6 @@ class REVERSE_SDE2:
             t = t - dt
 
 
-        x_ens_full[:, self.indxob] = xt
+        x_ens_full[:, self.indxob] = xt.clone()
         x_ens_analysis_new = x_ens_full
         return np.array(x_ens_analysis_new)
