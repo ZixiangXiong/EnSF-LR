@@ -92,11 +92,9 @@ python EnKF_nonlinear_lorenz63_0.py 50
 
 The optional numeric argument is the random seed.
 
-## Interview Talking Points
+## Method Overview
 
-In an interview, I describe this project as:
-
-> I implemented a two-step ensemble score filter for sparse nonlinear data assimilation. The method first applies a score-based reverse-SDE update to observed state variables, then transfers that correction to unobserved variables using ensemble-estimated linear regression. I evaluated it on Lorenz-63 and Lorenz-96 systems under sparse linear and nonlinear observations and compared it against EnSF and EnKF baselines.
+EnSF-LR uses a two-step analysis update for partially observed systems. First, a score-based reverse-SDE update is applied to the observed state variables. Second, the observed-state analysis increments are transferred to the unobserved state variables using ensemble-estimated linear regression. The method is evaluated on Lorenz-63 and Lorenz-96 systems under sparse linear and nonlinear observations and compared with EnSF and EnKF baselines.
 
 ## Citation
 
