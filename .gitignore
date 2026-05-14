@@ -5,6 +5,7 @@ __pycache__/
 venv/
 *.npy
 *.npz
+*.csv
 *.pkl
 *.pt
 *.pth

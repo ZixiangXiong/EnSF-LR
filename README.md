@@ -60,7 +60,8 @@ Run the Python scripts inside each experiment folder. For example:
 
 ```bash
 cd Nonlinear_lorenz63
-python hristo_EnSF_nonlinear_lorenz63_0.py
+python generate_data_nonlinear_lorenz63.py 50
+python EnSF_nonlinear_lorenz63_0.py 50
 ```
 
 Use the corresponding Lorenz-63 or Lorenz-96 folder depending on the observation setting you want to reproduce.

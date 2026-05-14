@@ -18,7 +18,7 @@ def main(seed):
         return dx
 
     x_truth = pd.read_csv("x_truth_trajectory_seed{}.csv".format(int(seed_kf))).iloc[:,1:].to_numpy().copy()  ## shape (500,40)
-    x_initial_ensemble = pd.read_csv("X_initial_forecst_hristo_seed{}.csv".format(int(seed_kf))).iloc[:,1:].to_numpy().copy()  ## shape (Ne,40)
+    x_initial_ensemble = pd.read_csv("X_initial_forecast_seed{}.csv".format(int(seed_kf))).iloc[:,1:].to_numpy().copy()  ## shape (Ne,40)
     y_obs_full = pd.read_csv("y_observation_trajectory_seed{}.csv".format(int(seed_kf))).iloc[:,1:].to_numpy().copy()  ## shape (500,40)
 
     ### Declarations
@@ -144,10 +144,10 @@ def main(seed):
 
 
         if k == T - 1:
-            pd.DataFrame(x_0).to_csv("x_0_traj_hristo_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
-            pd.DataFrame(x_1).to_csv("x_1_traj_hristo_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
-            pd.DataFrame(x_0_forecast).to_csv("x_0_traj_forecast_hristo_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
-            pd.DataFrame(x_1_forecast).to_csv("x_1_traj_forecast_hristo_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
+            pd.DataFrame(x_0).to_csv("x_0_traj_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
+            pd.DataFrame(x_1).to_csv("x_1_traj_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
+            pd.DataFrame(x_0_forecast).to_csv("x_0_traj_forecast_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
+            pd.DataFrame(x_1_forecast).to_csv("x_1_traj_forecast_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
 
 
 
@@ -177,20 +177,20 @@ def main(seed):
 
     if linear_regression == 0:
         pd.DataFrame(errora_k, columns=["RMSE_enkf"]).to_csv(
-            "RMSE_hristo_EnKF_nonlinear_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
+            "RMSE_EnKF_nonlinear_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
         if p < 1:
             pd.DataFrame(errora_obs, columns=["RMSE_obs"]).to_csv(
-                "RMSE_hristo_EnKF_nonlinear_observed_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
+                "RMSE_EnKF_nonlinear_observed_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
             pd.DataFrame(errora_unobs, columns=["RMSE_unobs"]).to_csv(
-                "RMSE_hristo_EnKF_nonlinear_unobserved_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
+                "RMSE_EnKF_nonlinear_unobserved_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
     elif linear_regression == 1:
         pd.DataFrame(errora_k, columns=["RMSE_enkf"]).to_csv(
-            "RMSE_hristo_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
+            "RMSE_EnKF_nonlinear_LR_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap, seed_kf))
         if p < 1:
             pd.DataFrame(errora_obs, columns=["RMSE_obs"]).to_csv(
-                "RMSE_hristo_EnKF_nonlinear_LR_observed_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
+                "RMSE_EnKF_nonlinear_LR_observed_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
             pd.DataFrame(errora_unobs, columns=["RMSE_unobs"]).to_csv(
-                "RMSE_hristo_EnKF_nonlinear_LR_unobserved_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
+                "RMSE_EnKF_nonlinear_LR_unobserved_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_kf))
 
 if __name__ == "__main__":
     seed = int(sys.argv[1]) if len(sys.argv) > 1 else 50

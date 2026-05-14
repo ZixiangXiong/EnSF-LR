@@ -1,8 +1,11 @@
 import numpy as np
 from scipy.integrate import odeint
 import pandas as pd
-from Rev_SDE_vanilla import REVERSE_SDE2
 import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from Rev_SDE_vanilla import REVERSE_SDE2
 
 
 def main(seed):
@@ -23,7 +26,7 @@ def main(seed):
         return [dx_dt, dy_dt, dz_dt]
 
     x_truth = pd.read_csv("x_truth_trajectory_lorenz63_seed{}.csv".format(int(seed_sf))).iloc[:,1:].to_numpy().copy()  ## shape (T,3)
-    x_initial_ensemble = pd.read_csv("X_initial_forecst_hristo_lorenz63_seed{}.csv".format(int(seed_sf))).iloc[:,1:].to_numpy().copy()  ## shape (Ne,3)
+    x_initial_ensemble = pd.read_csv("X_initial_forecast_lorenz63_seed{}.csv".format(int(seed_sf))).iloc[:,1:].to_numpy().copy()  ## shape (Ne,3)
     y_obs_full = pd.read_csv("y_observation_trajectory_lorenz63_seed{}.csv".format(int(seed_sf))).iloc[:,1:].to_numpy().copy()  ## shape (T,3)
 
     ### Declarations
@@ -161,12 +164,12 @@ def main(seed):
 
 
         if k == T - 1:
-            pd.DataFrame(x_0).to_csv("x_0_traj_linear_hristo_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_sf))
-            pd.DataFrame(x_1).to_csv("x_1_traj_linear_hristo_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_sf))
-            pd.DataFrame(x_2).to_csv("x_2_traj_linear_hristo_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_sf))
-            pd.DataFrame(x_0_forecast).to_csv("x_0_traj_linear_forecast_hristo_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.),obs_gap,seed_sf))
-            pd.DataFrame(x_1_forecast).to_csv("x_1_traj_linear_forecast_hristo_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.),obs_gap,seed_sf))
-            pd.DataFrame(x_2_forecast).to_csv("x_2_traj_linear_forecast_hristo_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.),obs_gap,seed_sf))
+            pd.DataFrame(x_0).to_csv("x_0_traj_linear_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_sf))
+            pd.DataFrame(x_1).to_csv("x_1_traj_linear_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_sf))
+            pd.DataFrame(x_2).to_csv("x_2_traj_linear_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.), obs_gap,seed_sf))
+            pd.DataFrame(x_0_forecast).to_csv("x_0_traj_linear_forecast_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.),obs_gap,seed_sf))
+            pd.DataFrame(x_1_forecast).to_csv("x_1_traj_linear_forecast_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.),obs_gap,seed_sf))
+            pd.DataFrame(x_2_forecast).to_csv("x_2_traj_linear_forecast_EnSF_LR_lorenz63_{}%obs_{}obsgap_seed{}.csv".format(int(p * 100.),obs_gap,seed_sf))
 
 
 
@@ -200,15 +203,15 @@ def main(seed):
             Xf_k[:, e] = Xa_e_S[-1, :]
 
     if linear_regression == 0:
-        pd.DataFrame(errora_k, columns=["RMSE_ensf"]).to_csv("RMSE_lorenz63_linear_hristo_EnSF_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
+        pd.DataFrame(errora_k, columns=["RMSE_ensf"]).to_csv("RMSE_lorenz63_linear_EnSF_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
         if p < 1:
-            pd.DataFrame(errora_obs, columns=["RMSE_obs"]).to_csv("RMSE_lorenz63_linear_hristo_EnSF_observed_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
-            pd.DataFrame(errora_unobs, columns=["RMSE_unobs"]).to_csv("RMSE_lorenz63_linear_hristo_EnSF_unobserved_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
+            pd.DataFrame(errora_obs, columns=["RMSE_obs"]).to_csv("RMSE_lorenz63_linear_EnSF_observed_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
+            pd.DataFrame(errora_unobs, columns=["RMSE_unobs"]).to_csv("RMSE_lorenz63_linear_EnSF_unobserved_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
     elif linear_regression == 1:
-        pd.DataFrame(errora_k, columns=["RMSE_ensf"]).to_csv("RMSE_lorenz63_linear_hristo_EnSF_LR_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
+        pd.DataFrame(errora_k, columns=["RMSE_ensf"]).to_csv("RMSE_lorenz63_linear_EnSF_LR_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap, seed_sf))
         if p < 1:
-            pd.DataFrame(errora_obs, columns=["RMSE_obs"]).to_csv("RMSE_lorenz63_linear_hristo_EnSF_LR_observed_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap,seed_sf))
-            pd.DataFrame(errora_unobs, columns=["RMSE_unobs"]).to_csv("RMSE_lorenz63_linear_hristo_EnSF_LR_unobserved_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap,seed_sf))
+            pd.DataFrame(errora_obs, columns=["RMSE_obs"]).to_csv("RMSE_lorenz63_linear_EnSF_LR_observed_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap,seed_sf))
+            pd.DataFrame(errora_unobs, columns=["RMSE_unobs"]).to_csv("RMSE_lorenz63_linear_EnSF_LR_unobserved_{}_{}obsgap_seed{}.csv".format(obs_type, obs_gap,seed_sf))
 
 
 if __name__ == "__main__":

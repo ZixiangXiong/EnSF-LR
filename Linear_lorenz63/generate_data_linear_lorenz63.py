@@ -24,7 +24,7 @@ def main(seed):
     print("x.shape", x.shape)
     indices = rng_t.choice(50000, size=1000, replace=False)
     X_initial = x[indices, :]
-    pd.DataFrame(X_initial).to_csv("X_initial_forecst_hristo_lorenz63_seed{}.csv".format(int(seed_num)))
+    pd.DataFrame(X_initial).to_csv("X_initial_forecast_lorenz63_seed{}.csv".format(int(seed_num)))
     x_truth_trajectory = x[50000:50000+T*2:2, :]
     print("x_truth_trajectory_lorenz63.shape",x_truth_trajectory.shape)
     pd.DataFrame(x_truth_trajectory).to_csv("x_truth_trajectory_lorenz63_seed{}.csv".format(int(seed_num)))
