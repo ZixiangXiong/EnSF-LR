@@ -40,7 +40,7 @@ EnSF-LR/
 │   └── EnKF_linear_lorenz96_*.py
 ├── Nonlinear_lorenz63/
 │   ├── figures/
-│   ├── generate_data_nonlinear_lorenz63.py
+│   ├── generate_data_lorenz63.py
 │   ├── EnSF_nonlinear_lorenz63_*.py
 │   └── EnKF_nonlinear_lorenz63_*.py
 ├── Nonlinear_lorenz96/
@@ -85,7 +85,7 @@ Run one nonlinear Lorenz-63 experiment:
 
 ```bash
 cd Nonlinear_lorenz63
-python generate_data_nonlinear_lorenz63.py 50
+python generate_data_lorenz63.py 50
 python EnSF_nonlinear_lorenz63_0.py 50
 python EnKF_nonlinear_lorenz63_0.py 50
 ```
