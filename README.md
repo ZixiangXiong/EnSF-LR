@@ -1,6 +1,6 @@
 # EnSF-LR
 
-Research code for **A Two-Step Ensemble Score Filter for Data Assimilation in Partially Observed Nonlinear Systems**.
+Research code for **A Two-Step Ensemble Score Filter for Data Assimilation in Partially Observed Systems**.
 
 This project implements and tests an Ensemble Score Filter with Linear Regression (EnSF-LR), a data assimilation method for estimating the full state of nonlinear dynamical systems when only part of the state is observed.
 
