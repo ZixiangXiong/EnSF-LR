@@ -140,7 +140,7 @@ If you use this code, please cite:
 
 ```bibtex
 @article{xiong2026ensflr,
-  title={A Two-Step Ensemble Score Filter for Data Assimilation in Partially Observed Nonlinear Systems},
+  title={A Two-Step Ensemble Score Filter for Data Assimilation in Partially Observed Systems},
   author={Xiong, Zixiang and Bao, Feng and Chipilski, Hristo G. and Liang, Siming and Tang, Jingqiao and Zhang, Guannan},
   year={2026}
 }
