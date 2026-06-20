@@ -2,99 +2,137 @@
 
 Research code for **A Two-Step Ensemble Score Filter for Data Assimilation in Partially Observed Systems**.
 
-This project implements and tests an Ensemble Score Filter with Linear Regression (EnSF-LR), a data assimilation method for estimating the full state of nonlinear dynamical systems when only part of the state is observed.
+This repository contains Python experiments for comparing Ensemble Score Filter with Linear Regression (EnSF-LR), Ensemble Score Filter (EnSF), and Ensemble Kalman Filter (EnKF) methods on Lorenz-63 and Lorenz-96 systems with sparse observations.
 
-## Project Summary
+## Project Overview
 
-Many forecasting problems, including weather and climate applications, require estimating hidden system variables from sparse noisy observations. Standard ensemble methods transfer information through covariance, while score-based methods can capture nonlinear likelihood effects but may only directly update observed variables.
+EnSF-LR is designed for partially observed dynamical systems. The analysis update is split into two parts:
 
-EnSF-LR combines both ideas:
+1. Apply a score-based reverse-SDE update to the observed state variables.
+2. Transfer the observed-state correction to unobserved variables with ensemble-estimated linear regression.
 
-1. **Score-based observed-state update**: apply an Ensemble Score Filter update to the observed components using a reverse-SDE formulation.
-2. **Regression-based information transfer**: use ensemble-estimated linear regression to transfer the observed-state correction to unobserved variables.
-
-The experiments compare EnSF-LR with Ensemble Score Filter (EnSF) and Ensemble Kalman Filter (EnKF) baselines on Lorenz-63 and Lorenz-96 systems.
-
-## What This Demonstrates
-
-- Data assimilation for partially observed nonlinear systems
-- Ensemble filtering and stochastic simulation
-- Reverse-SDE score-based analysis updates
-- Linear-regression information transfer between observed and unobserved variables
-- Numerical experiment design with Lorenz-63 and Lorenz-96 models
-- Python scientific computing with NumPy, SciPy, pandas, and PyTorch
+The experiments cover both linear observations and nonlinear `arctan` observations.
 
 ## Repository Structure
 
 ```text
 EnSF-LR/
-├── Linear_lorenz63/
-│   ├── figures/
-│   ├── generate_data_linear_lorenz63.py
-│   ├── EnSF_linear_lorenz63_*.py
-│   └── EnKF_linear_lorenz63_*.py
-├── Linear_lorenz96/
-│   ├── figures/
-│   ├── generate_data_linear_lorenz96.py
-│   ├── EnSF_linear_lorenz96_*.py
-│   └── EnKF_linear_lorenz96_*.py
-├── Nonlinear_lorenz63/
-│   ├── figures/
-│   ├── generate_data_lorenz63.py
-│   ├── EnSF_nonlinear_lorenz63_*.py
-│   └── EnKF_nonlinear_lorenz63_*.py
-├── Nonlinear_lorenz96/
-│   ├── figures/
-│   ├── generate_data_nonlinear_lorenz96.py
-│   ├── EnSF_nonlinear_lorenz96_*.py
-│   └── EnKF_nonlinear_lorenz96_*.py
 ├── Rev_SDE_vanilla.py
 ├── requirements.txt
-├── README.md
 ├── LICENSE
-└── .gitignore
+├── README.md
+├── Linear_lorenz63/
+│   ├── generate_data_linear_lorenz63.py
+│   ├── EnSF_linear_lorenz63_0.py
+│   ├── EnSF_linear_lorenz63_1.py
+│   ├── EnKF_linear_lorenz63_0.py
+│   └── EnKF_linear_lorenz63_1.py
+├── Linear_lorenz96/
+│   ├── generate_data_linear_lorenz96.py
+│   ├── EnSF_linear_lorenz96_0.py
+│   ├── EnSF_linear_lorenz96_1.py
+│   ├── EnKF_linear_lorenz96_0.py
+│   ├── EnKF_linear_lorenz96_1.py
+│   └── figures/
+├── Nonlinear_lorenz63/
+│   ├── generate_data_nonlinear_lorenz63.py
+│   ├── EnSF_nonlinear_lorenz63_0.py
+│   ├── EnSF_nonlinear_lorenz63_1.py
+│   ├── EnKF_nonlinear_lorenz63_0.py
+│   ├── EnKF_nonlinear_lorenz63_1.py
+│   └── figures/
+└── Nonlinear_lorenz96/
+    ├── generate_data_nonlinear_lorenz96.py
+    ├── EnSF_nonlinear_lorenz96_0.py
+    ├── EnSF_nonlinear_lorenz96_1.py
+    ├── EnKF_nonlinear_lorenz96_0.py
+    ├── EnKF_nonlinear_lorenz96_1.py
+    └── figures/
 ```
 
-## Experiment Groups
+## File Roles
 
-- `Linear_lorenz63/`: Lorenz-63 with sparse linear observations.
-- `Linear_lorenz96/`: Lorenz-96 with sparse linear observations.
-- `Nonlinear_lorenz63/`: Lorenz-63 with sparse nonlinear observations.
-- `Nonlinear_lorenz96/`: Lorenz-96 with sparse nonlinear observations.
-- `Rev_SDE_vanilla.py`: Shared reverse-SDE implementation used by EnSF experiments.
+- `Rev_SDE_vanilla.py`: shared reverse-SDE implementation used by the EnSF scripts.
+- `generate_data_*.py`: generate truth trajectories, initial ensembles, and noisy observations as CSV files in the current experiment folder.
+- `EnSF_*_0.py` and `EnKF_*_0.py`: baseline filtering runs without the linear-regression transfer step.
+- `EnSF_*_1.py` and `EnKF_*_1.py`: filtering runs with the linear-regression transfer step enabled.
+- `figures/`: plotting scripts and selected generated figures for the experiments that include figure assets.
 
-The generated CSV data and result files are intentionally not stored in the repository.
+Generated CSV inputs and result files are intentionally not committed. Run the data-generation scripts before running an experiment script in the same folder.
 
 ## Installation
 
-Create a Python environment and install dependencies:
+Create a Python environment, then install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-For Intel macOS environments using `torch==2.2.2`, keep NumPy below version 2:
+The pinned versions are:
 
-```bash
-pip install numpy==1.26.4 torch==2.2.2
+```text
+numpy==1.26.4
+torch==2.2.2
+scipy
+pandas
+matplotlib
 ```
 
-## Quick Example
+Keeping NumPy below version 2 is important for compatibility with the pinned PyTorch version in this repository.
 
-Run one nonlinear Lorenz-63 experiment:
+## Running Experiments
+
+Run scripts from inside the corresponding experiment directory so the generated CSV files are read and written in the expected location.
+
+Example: nonlinear Lorenz-63 with seed `0`.
 
 ```bash
 cd Nonlinear_lorenz63
-python generate_data_lorenz63.py 50
-python EnSF_nonlinear_lorenz63_0.py 50
-python EnKF_nonlinear_lorenz63_0.py 50
+python generate_data_nonlinear_lorenz63.py
+python EnSF_nonlinear_lorenz63_0.py 0
+python EnSF_nonlinear_lorenz63_1.py 0
+python EnKF_nonlinear_lorenz63_0.py 0
+python EnKF_nonlinear_lorenz63_1.py 0
 ```
 
-The optional numeric argument is the random seed.
+Example: linear Lorenz-96 with seed `0`.
 
-## Method Overview
+```bash
+cd Linear_lorenz96
+python generate_data_linear_lorenz96.py
+python EnSF_linear_lorenz96_0.py 0
+python EnSF_linear_lorenz96_1.py 0
+python EnKF_linear_lorenz96_0.py 0
+python EnKF_linear_lorenz96_1.py 0
+```
 
-EnSF-LR uses a two-step analysis update for partially observed systems. First, a score-based reverse-SDE update is applied to the observed state variables. Second, the observed-state analysis increments are transferred to the unobserved state variables using ensemble-estimated linear regression. The method is evaluated on Lorenz-63 and Lorenz-96 systems under sparse linear and nonlinear observations and compared with EnSF and EnKF baselines.
+The experiment scripts accept an optional seed argument. If no seed is supplied, they default to `50`, but the current data generators do not all create seed `50` by default:
+
+- Lorenz-63 generators create seeds `0` through `19`.
+- Lorenz-96 generators create seed `0`.
+
+Use one of the generated seeds, or edit the loop at the bottom of the relevant `generate_data_*.py` script to create additional seeds.
+
+## Experiment Folders
+
+- `Linear_lorenz63/`: Lorenz-63 with sparse linear observations.
+- `Linear_lorenz96/`: Lorenz-96 with sparse linear observations.
+- `Nonlinear_lorenz63/`: Lorenz-63 with sparse nonlinear observations using `arctan`.
+- `Nonlinear_lorenz96/`: Lorenz-96 with sparse nonlinear observations using `arctan`.
+
+Each folder follows the same general pattern: generate data first, run EnSF and EnKF baselines, then run the `_1.py` scripts to produce the linear-regression variants.
+
+## Outputs
+
+Experiment scripts write CSV files such as:
+
+- `X_initial_forecast*_seed*.csv`
+- `x_truth_trajectory*_seed*.csv`
+- `y_observation_trajectory*_seed*.csv`
+- `RMSE_*_seed*.csv`
+- trajectory CSV files for selected `_1.py` runs
+
+Plotting scripts under `figures/` expect these generated CSV outputs to exist with the filenames used in the plotting code.
 
 ## Citation
 
