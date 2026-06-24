@@ -109,7 +109,7 @@ python EnKF_linear_lorenz96_1.py 0
 The experiment scripts accept an optional seed argument. If no seed is supplied, they default to `50`, but the current data generators do not all create seed `50` by default:
 
 - Lorenz-63 generators create seeds `0` through `19`.
-- Lorenz-96 generators create seed `0`.
+- Lorenz-96 generators create seed `0` through `19`.
 
 Use one of the generated seeds, or edit the loop at the bottom of the relevant `generate_data_*.py` script to create additional seeds.
 
